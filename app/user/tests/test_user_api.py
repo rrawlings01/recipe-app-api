@@ -37,7 +37,7 @@ class PublicUserApiTests(TestCase):
         self.assertTrue(user.check_password(payload['password']))
         self.assertNotIn('password', res.data)
 
-    def test_user_with_exist_error(self):
+    def test_user_with_email_exists_error(self):
         """Test error returned if user with email exists"""
         payload = {
             'email': 'test@example.com',
@@ -49,7 +49,7 @@ class PublicUserApiTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_password_too_short(self):
+    def test_password_too_short_error(self):
         """Test an error is returned if password is less than 5 characters"""
         payload = {
             'email': 'test@example.com',

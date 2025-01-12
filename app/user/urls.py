@@ -5,9 +5,9 @@ from django.urls import path
 
 from user import views
 
-from app.app.urls import urlpatterns
 
-app_name = ('user')
+
+app_name = 'user'
 
 urlpatterns = [
     path('create/', views.CreateUserView.as_view(), name='create'),
