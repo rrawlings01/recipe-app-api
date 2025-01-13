@@ -18,7 +18,7 @@ from recipe.serializers import RecipeSerializer
 RECIPES_URL = reverse('recipe:recipe-list')
 
 
-def create_recipe(**params):
+def create_recipe(user, **params):
     """Create and return a sample recipe"""
     defaults = {
         'title': 'Sample recipe title',
@@ -41,7 +41,7 @@ class PublicRecipeApiTests(TestCase):
 
     def test_auth_required(self):
         """Test that authentication is required"""
-        res = self.client.get(reverse(RECIPES_URL))
+        res = self.client.get(RECIPES_URL)
 
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -64,12 +64,12 @@ class PrivateRecipeApiTests(TestCase):
 
         res = self.client.get(RECIPES_URL)
 
-        recipes = Recipe.objects.all.order_by('-id')
-        serializer = RecipeSerializer(recipes, many=True)
+        recipe = Recipe.objects.all().order_by('-id')
+        serializer = RecipeSerializer(recipe, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
 
-    def test_recipes_limited_to_user(self):
+    def test_recipe_limited_to_user(self):
         """Test list of recipes for authenticated user"""
         other_user = get_user_model().objects.create_user(
             'otheruser@example',
@@ -80,7 +80,7 @@ class PrivateRecipeApiTests(TestCase):
 
         res = self.client.get(RECIPES_URL)
 
-        recipes = Recipe.objects.filter(user=self.user)
-        serializer = RecipeSerializer(recipes, many=True)
+        recipe = Recipe.objects.filter(user=self.user)
+        serializer = RecipeSerializer(recipe, many=True)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
