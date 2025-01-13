@@ -30,9 +30,9 @@ def create_recipe(user, **params):
     defaults = {
         'title': 'Sample recipe title',
         'time_minutes': 22,
-        'price': ('5.25'),
+        'price': Decimal('5.25'),
         'description': 'Sample description',
-        'link': 'http://www.example.com/recipe.pdf',
+        'link': 'http://example.com/recipe.pdf',
     }
     defaults.update(params)
 
@@ -59,7 +59,7 @@ class PrivateRecipeApiTests(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = get_user_model().objects.create_user(
-            'user@example',
+            'user@example.com',
             'testpass123',
         )
         self.client.force_authenticate(self.user)
@@ -79,7 +79,7 @@ class PrivateRecipeApiTests(TestCase):
     def test_recipe_limited_to_user(self):
         """Test list of recipes for authenticated user"""
         other_user = get_user_model().objects.create_user(
-            'otheruser@example',
+            'other@example.com',
             'password123',
         )
         create_recipe(user=other_user)
