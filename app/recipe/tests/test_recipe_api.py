@@ -258,7 +258,7 @@ class PrivateRecipeApiTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         new_tag = Tag.objects.get(user=self.user, name='Lunch')
-        self.assertEqual(new_tag, recipe.tags.all())
+        self.assertIn(new_tag, recipe.tags.all())
 
     def test_update_recipe_assign_tag(self):
         '''Test assigning an existing tag when updating a recipe'''
@@ -275,10 +275,10 @@ class PrivateRecipeApiTests(TestCase):
         self.assertIn(tag_lunch, recipe.tags.all())
         self.assertNotIn(tag_breakfast, recipe.tags.all())
 
-    def clear_recipe_tags(self):
+    def test_clear_recipe_tags(self):
         '''Test clearing a recipes tags'''
-        tag = Tag.objects.creat(user=self.user, name='Dessert')
-        recipe = Recipe.objects.create(user=self.user)
+        tag = Tag.objects.create(user=self.user, name='Dessert')
+        recipe = create_recipe(user=self.user)
         recipe.tags.add(tag)
 
         payload = {'tags': []}
