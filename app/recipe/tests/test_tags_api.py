@@ -16,7 +16,7 @@ from recipe.serializers import TagSerializer
 TAGS_URL = reverse('recipe:tag-list')
 
 
-def detiail_url(tag_id):
+def detail_url(tag_id):
     '''Create and return a tag detail id'''
     return reverse('recipe:tag-detail', args=[tag_id])
 
@@ -76,7 +76,7 @@ class PrivateTagsApiTests(TestCase):
         tag = Tag.objects.create(user=self.user, name='After Dinner')
 
         payload = {'name': 'Dessert'}
-        url = detiail_url(tag.id)
+        url = detail_url(tag.id)
         res = self.client.patch(url, payload)
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -87,7 +87,7 @@ class PrivateTagsApiTests(TestCase):
         '''Test deleting a tag'''
         tag = Tag.objects.create(user=self.user, name='Breakfast')
 
-        url = detiail_url(tag.id)
+        url = detail_url(tag.id)
         res = self.client.delete(url)
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
