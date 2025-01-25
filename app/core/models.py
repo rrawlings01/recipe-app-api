@@ -77,6 +77,7 @@ class Tag(models.Model):
 
 class Ingredient(models.Model):
     '''Ingredient for recipes'''
+    #if running into issues with migration, try adding default field to name
     name = models.CharField(max_length=255)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
