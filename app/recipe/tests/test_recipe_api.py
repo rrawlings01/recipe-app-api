@@ -371,7 +371,7 @@ class PrivateRecipeApiTests(TestCase):
         '''Test clearing a recipe ingredients'''
         ingredient = Ingredient.objects.create(user=self.user, name='Garlic')
         recipe = create_recipe(user=self.user)
-        recipe.Ingredients.add(ingredient)
+        recipe.ingredients.add(ingredient)
 
         payload = {'ingredients': []}
         url = detail_url(recipe.id)
@@ -379,4 +379,3 @@ class PrivateRecipeApiTests(TestCase):
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(recipe.ingredients.count(), 0)
-        
