@@ -57,7 +57,7 @@ class PrivateIngredientsApiTests(TestCase):
     def test_ingredients_limited_to_user(self):
         '''Test list of ingredients is limited to authenticated user'''
         user2 = create_user(email='user2@example.com')
-        Ingredent.objects.create(user=user2, name='Salt')
+        Ingredient.objects.create(user=user2, name='Salt')
         ingredient = Ingredient.objects.create(user=self.user, name='Pepper')
 
         res = self.client.get(INGREDIENTS_URL)
@@ -65,4 +65,4 @@ class PrivateIngredientsApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 1)
         self.assertEqual(res.data[0]['name'], ingredient.name)
-        self.assertEqual(res.data[1]['id'], ingredient.id)
+        self.assertEqual(res.data[0]['id'], ingredient.id)
