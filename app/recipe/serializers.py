@@ -1,6 +1,7 @@
 """
 Serializer for recipe apis
 """
+
 from rest_framework import serializers
 
 from core.models import (
@@ -91,7 +92,7 @@ class RecipeDetailSerializer(RecipeSerializer):
     """Serializer for recipe detail view"""
 
     class Meta(RecipeSerializer.Meta):
-        fields = RecipeSerializer.Meta.fields + ['description']
+        fields = RecipeSerializer.Meta.fields + ['description', 'image']
 
 
 class RecipeImageSerializer(serializers.ModelSerializer):
