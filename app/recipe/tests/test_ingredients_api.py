@@ -18,7 +18,7 @@ from core.models import (
 from recipe.serializers import IngredientSerializer
 
 
-INGREDIENTS_URL =  reverse('recipe:ingredient-list')
+INGREDIENTS_URL = reverse('recipe:ingredient-list')
 
 
 def detail_url(ingredient_id):
@@ -50,7 +50,7 @@ class PrivateIngredientsApiTests(TestCase):
     def setUp(self):
         self.user = create_user()
         self.client = APIClient()
-        self.client.force_authenticate(user=self.user)
+        self.client.force_authenticate(self.user)
 
     def retrieve_ingredients(self):
         '''Test retrieving a list of ingredients'''
@@ -97,10 +97,10 @@ class PrivateIngredientsApiTests(TestCase):
         res = self.client.delete(url)
 
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
-        ingredients = (Ingredient.objects.filter(user=self.user))
+        ingredients = Ingredient.objects.filter(user=self.user)
         self.assertFalse(ingredients.exists())
 
-    def test_filter_ingredient_assigned_to_recipes(self):
+    def test_filter_ingredients_assigned_to_recipes(self):
         '''Test listing ingredients by those assign to recipes'''
         in1 = Ingredient.objects.create(user=self.user, name='Apples')
         in2 = Ingredient.objects.create(user=self.user, name='Turkey')
@@ -127,14 +127,12 @@ class PrivateIngredientsApiTests(TestCase):
             title='Eggs Benedict',
             time_minutes=60,
             price=Decimal('7.00'),
-            link='http://example.com',
             user=self.user,
         )
         recipe2 = Recipe.objects.create(
             title='Herb Eggs',
             time_minutes=20,
             price=Decimal('4.00'),
-            link='http://example.com',
             user=self.user,
         )
         recipe1.ingredients.add(ing)
@@ -143,4 +141,3 @@ class PrivateIngredientsApiTests(TestCase):
         res = self.client.get(INGREDIENTS_URL, {'assigned_only': 1})
 
         self.assertEqual(len(res.data), 1)
-
